@@ -14,4 +14,6 @@ public class CommentDto {
     private String body;
     private int points;
 
+    private UserDto user;
+
 }

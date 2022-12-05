@@ -1,8 +1,10 @@
 package org.example.service;
 
 
+import org.example.dto.BookDto;
 import org.example.dto.CommentDto;
 import org.example.dto.UserDto;
+import org.example.model.Book;
 import org.example.model.Comment;
 import org.example.model.User;
 import org.example.repository.CommentRepository;
@@ -30,6 +32,18 @@ public class UserService {
 
     public UserDto getById(long id) {
         return this.toDTO(this.repository.findById(id).orElseThrow());
+    }
+
+
+    public UserDto create(UserDto userDto) {
+        User user = this.repository.save(this.toDomain(userDto));
+        return this.toDTO(user);
+    }
+
+    public UserDto update(Long id, UserDto userDto) {
+        userDto.setId(id);
+        User user = this.repository.save(this.toDomain(userDto));
+        return this.toDTO(user);
     }
 
 

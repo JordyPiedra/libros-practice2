@@ -15,8 +15,12 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user_app")
+@Table(name = "user_app", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "nick"),
+        @UniqueConstraint(columnNames = "email")
+})
 public class User {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,6 +30,7 @@ public class User {
     private String email;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)    private List<Comment> comments = new ArrayList<>();
+            cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
 }

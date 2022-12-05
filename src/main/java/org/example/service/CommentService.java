@@ -4,8 +4,10 @@ package org.example.service;
 import org.example.dto.CommentDto;
 import org.example.model.Book;
 import org.example.model.Comment;
+import org.example.model.User;
 import org.example.repository.BookRepository;
 import org.example.repository.CommentRepository;
+import org.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +21,15 @@ public class CommentService {
 
     private final BookRepository bookRepository;
 
+    private final UserRepository userRepository;
+
+
 
     @Autowired
-    public CommentService(CommentRepository repository, BookRepository bookRepository) {
+    public CommentService(CommentRepository repository, BookRepository bookRepository, UserRepository userRepository) {
         this.repository = repository;
         this.bookRepository = bookRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -41,6 +47,7 @@ public class CommentService {
     public CommentDto create(long idBook ,CommentDto commentDto) {
         Comment comment = this.toDomain(commentDto);
         this.setBook(comment,idBook);
+        this.setUser(comment,commentDto.getUser().getNick());
         this.repository.save(comment);
         return this.toDTO(comment);
     }
@@ -61,6 +68,14 @@ public class CommentService {
                 .orElseThrow(()-> new NoSuchElementException("Book not found for this id :: " + id));
         comment.setBook(book);
     }
+
+    private void setUser(Comment comment, String nick){
+        User user = this.userRepository.findFirstByNick(nick)
+                .orElseThrow(()-> new NoSuchElementException("User not found for this nick :: " + nick));
+        comment.setUser(user);
+    }
+
+
 
     private Comment toDomain(CommentDto commentDto) {
         return Comment.builder()

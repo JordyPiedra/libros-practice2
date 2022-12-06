@@ -39,7 +39,7 @@ public class CommentController {
 
     @PostMapping("/books/{idBook}/comments/")
     public ResponseEntity<CommentDto> createBook(@PathVariable long idBook, @RequestBody CommentDto commentDto) {
-        CommentDto responseDto = this.service.create(idBook, commentDto);
+        CommentDto responseDto = this.service.save(idBook, commentDto);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(responseDto.getId()).toUri();
         return ResponseEntity.created(location).body(responseDto);
     }
@@ -48,7 +48,7 @@ public class CommentController {
     @PutMapping("/books/{idBook}/comments/{id}")
     public ResponseEntity<CommentDto> updateBook(@PathVariable long idBook, @PathVariable long id, @RequestBody CommentDto commentDto) {
         commentDto.setId(id);
-        CommentDto responseDto = this.service.update(idBook, commentDto);
+        CommentDto responseDto = this.service.save(idBook, commentDto);
         return ResponseEntity.ok(responseDto);
     }
 

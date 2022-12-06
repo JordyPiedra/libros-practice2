@@ -2,6 +2,7 @@ package org.example.service;
 
 
 import org.example.dto.CommentDto;
+import org.example.dto.UserDto;
 import org.example.model.Book;
 import org.example.model.Comment;
 import org.example.model.User;
@@ -24,7 +25,6 @@ public class CommentService {
     private final UserRepository userRepository;
 
 
-
     @Autowired
     public CommentService(CommentRepository repository, BookRepository bookRepository, UserRepository userRepository) {
         this.repository = repository;
@@ -37,44 +37,37 @@ public class CommentService {
         return this.repository.findAllByBookId(idBook).stream().map(this::toDTO).toList();
     }
 
-    public CommentDto getById(long idBook , long id) {
-      Comment  comment = this.repository.findByBookIdAndId(idBook,id);
-      if (comment == null)
-          throw new NoSuchElementException("Comment not found");
-      return this.toDTO(comment);
+    public CommentDto getById(long idBook, long id) {
+        Comment comment = this.repository.findByBookIdAndId(idBook, id);
+        if (comment == null)
+            throw new NoSuchElementException("Comment not found");
+        return this.toDTO(comment);
     }
 
-    public CommentDto create(long idBook ,CommentDto commentDto) {
+    public CommentDto save(long idBook, CommentDto commentDto) {
         Comment comment = this.toDomain(commentDto);
-        this.setBook(comment,idBook);
-        this.setUser(comment,commentDto.getUser().getNick());
+        this.setBook(comment, idBook);
+        this.setUser(comment, commentDto.getUser().getNick());
         this.repository.save(comment);
         return this.toDTO(comment);
     }
 
-    public CommentDto update(Long idBook, CommentDto commentDto) {
-        Comment comment = this.toDomain(commentDto);
-        this.setBook(comment,idBook);
-        this.repository.save(this.toDomain(commentDto));
-        return this.toDTO(comment);
-    }
 
     public void delete(Long id) {
         this.repository.deleteById(id);
     }
 
-    private void setBook(Comment comment, long id){
+    private void setBook(Comment comment, long id) {
         Book book = this.bookRepository.findById(id)
-                .orElseThrow(()-> new NoSuchElementException("Book not found for this id :: " + id));
+                .orElseThrow(() -> new NoSuchElementException("Book not found for this id :: " + id));
         comment.setBook(book);
     }
 
-    private void setUser(Comment comment, String nick){
+    private void setUser(Comment comment, String nick) {
         User user = this.userRepository.findFirstByNick(nick)
-                .orElseThrow(()-> new NoSuchElementException("User not found for this nick :: " + nick));
+                .orElseThrow(() -> new NoSuchElementException("User not found for this nick :: " + nick));
         comment.setUser(user);
     }
-
 
 
     private Comment toDomain(CommentDto commentDto) {
@@ -88,6 +81,9 @@ public class CommentService {
         return CommentDto.builder().id(comment.getId())
                 .body(comment.getBody())
                 .points(comment.getPoints())
+                .user(UserDto.builder().id(comment.getUser().getId())
+                        .email(comment.getUser().getEmail())
+                        .nick(comment.getUser().getNick()).build())
                 .build();
     }
 

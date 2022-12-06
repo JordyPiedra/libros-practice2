@@ -36,15 +36,14 @@ public class BookService {
     }
 
     public BookDto update(Long id, BookDto bookDto) {
-        bookDto.setId(id);
+        this.validateBook(id);
         Book book = this.repository.save(this.toDomain(bookDto));
+        book.setId(id);
         return this.toDTO(book);
     }
 
     public void delete(Long id) {
-        this.repository.findById(id)
-                .orElseThrow(()-> new NoSuchElementException("Book not found for this id :: " + id));
-
+        this.validateBook(id);
         this.repository.deleteById(id);
     }
 
@@ -64,4 +63,8 @@ public class BookService {
                 .comments(book.getComments()).build();
     }
 
+    private Book validateBook(long id) {
+        return this.repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Book not found for this id :: " + id));
+    }
 }

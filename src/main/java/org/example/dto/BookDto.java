@@ -1,7 +1,8 @@
 package org.example.dto;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.example.model.Comment;
 
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.List;
 public class BookDto {
 
 	private long id;
+
+	private String title;
 
 	private String summary;
 

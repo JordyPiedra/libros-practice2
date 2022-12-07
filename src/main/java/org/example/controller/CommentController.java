@@ -112,7 +112,7 @@ public class CommentController {
             )
     })
     @PostMapping("/books/{idBook}/comments/")
-    public ResponseEntity<CommentDto> createBook(
+    public ResponseEntity<CommentDto> createComment(
             @Parameter(description = "Book Id")
             @PathVariable long idBook,
             @Parameter(description = "Insert data")
@@ -145,7 +145,7 @@ public class CommentController {
             )
     })
     @PutMapping("/books/{idBook}/comments/{id}")
-    public ResponseEntity<CommentDto> updateBook(
+    public ResponseEntity<CommentDto> updateComment(
             @Parameter(description = "Book Id")
             @PathVariable long idBook,
             @Parameter(description = "Comment Id")
@@ -178,7 +178,7 @@ public class CommentController {
             )
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<BookDto> deleteBook(
+    public ResponseEntity<BookDto> deleteComment(
             @Parameter(description = "Comment Id")
             @PathVariable long id) {
         this.service.delete(id);

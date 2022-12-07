@@ -3,6 +3,7 @@ package org.example.service;
 
 import org.example.dto.BookDto;
 import org.example.dto.CommentDto;
+import org.example.dto.CommentResponseDto;
 import org.example.dto.UserDto;
 import org.example.model.Book;
 import org.example.model.Comment;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
@@ -48,7 +50,19 @@ public class UserService {
 
 
     public void delete(Long id) {
+        User user = this.repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found for this id :: " + id));
+        if (user.getComments() != null && !user.getComments().isEmpty()) {
+            throw new RuntimeException("User must be empty comments");
+        }
         this.repository.deleteById(id);
+
+    }
+
+    public List<CommentResponseDto> getCommentsByUser(long id) {
+        User user = this.repository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found for this id :: " + id));
+        assert (user.getComments() != null);
+        return user.getComments().stream().map(this::toCommentResponseDto).toList();
     }
 
     private User toDomain(UserDto userDto) {
@@ -61,6 +75,15 @@ public class UserService {
         return UserDto.builder().id(user.getId())
                 .email(user.getEmail())
                 .nick(user.getNick()).build();
+    }
+
+    private CommentResponseDto toCommentResponseDto(Comment comment) {
+        return CommentResponseDto.builder().id(comment.getId())
+                .body(comment.getBody())
+                .points(comment.getPoints())
+                .userId(comment.getUser().getId())
+                .bookId(comment.getBook().getId())
+                .build();
     }
 
 }

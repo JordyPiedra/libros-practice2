@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.example.dto.BookDto;
 import org.example.dto.CommentDto;
+import org.example.dto.CommentResponseDto;
 import org.example.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,7 @@ public class CommentController {
             )
     })
     @GetMapping("/comments")
-    public List<CommentDto> getAll(
+    public List<CommentResponseDto> getAll(
             @Parameter(description = "Comments by Book Id")
             @PathVariable long idBook) {
         return this.service.getAll(idBook);
@@ -82,7 +83,7 @@ public class CommentController {
             )
     })
     @GetMapping("/comments/{id}")
-    public CommentDto getComment(
+    public CommentResponseDto getComment(
             @Parameter(description = "id of book to be searched")
             @PathVariable long idBook,
             @Parameter(description = "id of comment to be searched")
@@ -112,12 +113,12 @@ public class CommentController {
             )
     })
     @PostMapping("/comments/")
-    public ResponseEntity<CommentDto> createComment(
+    public ResponseEntity<CommentResponseDto> createComment(
             @Parameter(description = "Book Id")
             @PathVariable long idBook,
             @Parameter(description = "Insert data")
             @RequestBody CommentDto commentDto) {
-        CommentDto responseDto = this.service.create(idBook, commentDto);
+        CommentResponseDto responseDto = this.service.create(idBook, commentDto);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(responseDto.getId()).toUri();
         return ResponseEntity.created(location).body(responseDto);
     }
@@ -145,13 +146,13 @@ public class CommentController {
             )
     })
     @PutMapping("/comments/{id}")
-    public ResponseEntity<CommentDto> updateComment(
+    public ResponseEntity<CommentResponseDto> updateComment(
             @Parameter(description = "Book Id")
             @PathVariable long idBook,
             @Parameter(description = "Comment Id")
             @PathVariable long id,
             @RequestBody CommentDto commentDto) {
-        CommentDto responseDto = this.service.update(idBook, id, commentDto);
+        CommentResponseDto responseDto = this.service.update(idBook, id, commentDto);
         return ResponseEntity.ok(responseDto);
     }
 

@@ -2,6 +2,7 @@ package org.example.service;
 
 
 import org.example.dto.CommentDto;
+import org.example.dto.CommentResponseDto;
 import org.example.dto.UserDto;
 import org.example.model.Book;
 import org.example.model.Comment;
@@ -33,18 +34,18 @@ public class CommentService {
     }
 
 
-    public List<CommentDto> getAll(long idBook) {
+    public List<CommentResponseDto> getAll(long idBook) {
         return this.repository.findAllByBookId(idBook).stream().map(this::toDTO).toList();
     }
 
-    public CommentDto getById(long idBook, long id) {
+    public CommentResponseDto getById(long idBook, long id) {
         Comment comment = this.repository.findByBookIdAndId(idBook, id);
         if (comment == null)
             throw new NoSuchElementException("Comment not found");
         return this.toDTO(comment);
     }
 
-    public CommentDto create(long idBook, CommentDto commentDto) {
+    public CommentResponseDto create(long idBook, CommentDto commentDto) {
         Comment comment = this.toDomain(commentDto);
         this.setBook(comment, idBook);
         this.setUser(comment, commentDto.getUser().getNick());
@@ -52,7 +53,7 @@ public class CommentService {
         return this.toDTO(comment);
     }
 
-    public CommentDto update(long idBook, long id ,CommentDto commentDto) {
+    public CommentResponseDto update(long idBook, long id ,CommentDto commentDto) {
         this.validateComment(id);
         Comment comment = this.toDomain(commentDto);
         comment.setId(id);
@@ -90,15 +91,15 @@ public class CommentService {
                 .build();
     }
 
-    private CommentDto toDTO(Comment comment) {
-        return CommentDto.builder().id(comment.getId())
+    private CommentResponseDto toDTO(Comment comment) {
+        return CommentResponseDto.builder().id(comment.getId())
                 .body(comment.getBody())
                 .points(comment.getPoints())
-                .user(UserDto.builder().id(comment.getUser().getId())
-                        .email(comment.getUser().getEmail())
-                        .nick(comment.getUser().getNick()).build())
+                .userId(comment.getUser().getId())
+                .bookId(comment.getBook().getId())
                 .build();
     }
+
 
     private Comment validateComment(long id) {
         return this.repository.findById(id)

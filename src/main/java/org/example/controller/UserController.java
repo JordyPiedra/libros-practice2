@@ -172,4 +172,12 @@ public class UserController {
         this.service.delete(id);
         return ResponseEntity.ok().build();
     }
+
+
+
+    @GetMapping("/{id}/comments/")
+    public List<UserDto> getAllCommentsByUser(@PathVariable long id)
+    {
+        return this.service.getAll();
+    }
 }

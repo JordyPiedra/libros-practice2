@@ -10,11 +10,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.example.dto.BookDto;
 import org.example.dto.UserDto;
 import org.example.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
@@ -52,8 +53,8 @@ public class UserController {
             )
     })
     @GetMapping("/")
-    public List<UserDto> getAll() {
-        return this.service.getAll();
+    public Page<UserDto> getAll(Pageable page) {
+        return this.service.getAll(page);
     }
 
     @Operation(summary = "Get user")
@@ -176,8 +177,8 @@ public class UserController {
 
 
     @GetMapping("/{id}/comments/")
-    public List<UserDto> getAllCommentsByUser(@PathVariable long id)
+    public Page<UserDto> getAllCommentsByUser(@PathVariable long id, Pageable page)
     {
-        return this.service.getAll();
+        return this.service.getAll(page);
     }
 }

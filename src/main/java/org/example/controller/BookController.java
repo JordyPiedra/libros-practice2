@@ -9,11 +9,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.example.dto.BookDto;
 import org.example.service.BookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
@@ -51,8 +52,8 @@ public class BookController {
             )
     })
     @GetMapping("/")
-    public List<BookDto> getAll() {
-        return this.service.getAll();
+    public Page<BookDto> getAll(Pageable page) {
+        return this.service.getAll(page);
     }
 
     @Operation(summary = "Get a book by its id")

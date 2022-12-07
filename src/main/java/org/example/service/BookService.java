@@ -8,10 +8,11 @@ import org.example.model.Book;
 import org.example.model.Comment;
 import org.example.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -26,8 +27,8 @@ public class BookService {
     }
 
 
-    public List<BookDto> getAll() {
-        return this.repository.findAll().stream().map(this::toDTO).toList();
+    public Page<BookDto> getAll(Pageable page) {
+        return this.repository.findAll(page).map(this::toDTO);
     }
 
     public BookDto getById(long id) {

@@ -1,16 +1,14 @@
 package org.example.service;
 
 
-import org.example.dto.BookDto;
-import org.example.dto.CommentDto;
 import org.example.dto.CommentResponseDto;
 import org.example.dto.UserDto;
-import org.example.model.Book;
 import org.example.model.Comment;
 import org.example.model.User;
-import org.example.repository.CommentRepository;
 import org.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +26,8 @@ public class UserService {
     }
 
 
-    public List<UserDto> getAll() {
-        return this.repository.findAll().stream().map(this::toDTO).toList();
+    public Page<UserDto> getAll(Pageable page) {
+        return this.repository.findAll(page).map(this::toDTO);
     }
 
     public UserDto getById(long id) {

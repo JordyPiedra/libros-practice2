@@ -12,11 +12,12 @@ import org.example.dto.CommentDto;
 import org.example.dto.CommentResponseDto;
 import org.example.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
@@ -55,10 +56,11 @@ public class CommentController {
             )
     })
     @GetMapping("/comments")
-    public List<CommentResponseDto> getAll(
+    public Page<CommentResponseDto> getAll(
             @Parameter(description = "Comments by Book Id")
-            @PathVariable long idBook) {
-        return this.service.getAll(idBook);
+            @PathVariable long idBook,
+            Pageable page) {
+        return this.service.getAll(idBook, page);
     }
 
     @Operation(summary = "Get comment by Id")

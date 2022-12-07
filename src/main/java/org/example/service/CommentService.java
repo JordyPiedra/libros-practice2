@@ -3,7 +3,6 @@ package org.example.service;
 
 import org.example.dto.CommentDto;
 import org.example.dto.CommentResponseDto;
-import org.example.dto.UserDto;
 import org.example.model.Book;
 import org.example.model.Comment;
 import org.example.model.User;
@@ -11,9 +10,10 @@ import org.example.repository.BookRepository;
 import org.example.repository.CommentRepository;
 import org.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -34,8 +34,8 @@ public class CommentService {
     }
 
 
-    public List<CommentResponseDto> getAll(long idBook) {
-        return this.repository.findAllByBookId(idBook).stream().map(this::toDTO).toList();
+    public Page<CommentResponseDto> getAll(long idBook, Pageable page) {
+        return this.repository.findAllByBookId(idBook, page).map(this::toDTO);
     }
 
     public CommentResponseDto getById(long idBook, long id) {

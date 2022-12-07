@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.example.dto.BookDto;
+import org.example.dto.BookIdentifiersDto;
 import org.example.service.BookService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,6 +56,12 @@ public class BookController {
     public Page<BookDto> getAll(Pageable page) {
         return this.service.getAll(page);
     }
+
+    @GetMapping("/identifiers")
+    public Page<BookIdentifiersDto> getAllIdentifiers(Pageable page) {
+        return this.service.getAllBooksIdentifier(page);
+    }
+
 
     @Operation(summary = "Get a book by its id")
     @ApiResponses(value = {

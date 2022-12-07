@@ -1,6 +1,7 @@
 package org.example.service;
 
 
+import jakarta.annotation.PostConstruct;
 import org.example.dto.CommentDto;
 import org.example.dto.CommentResponseDto;
 import org.example.model.Book;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -33,6 +36,31 @@ public class CommentService {
         this.userRepository = userRepository;
     }
 
+    @PostConstruct
+    public void init() {
+        User user1 = User.builder()
+                .email("user1@user1.com")
+                .nick("user1").build();
+        this.userRepository.save(user1);
+        for (int i = 0; i < 100; i++) {
+            Book book = Book.builder().author("author " + i)
+                    .title("title " + i)
+                    .summary("summary " + i)
+                    .editorial("editorial " + i)
+                    .publicationYear(2022).build();
+            this.bookRepository.save(book);
+            for (int j = 0; j < 100; j++) {
+                Comment comment = Comment.builder()
+                        .body("Comentario " + j)
+                        .points(10)
+                        .user(user1)
+                        .book(book)
+                        .build();
+                this.repository.save(comment);
+            }
+        }
+
+    }
 
     public Page<CommentResponseDto> getAll(long idBook, Pageable page) {
         return this.repository.findAllByBookId(idBook, page).map(this::toDTO);

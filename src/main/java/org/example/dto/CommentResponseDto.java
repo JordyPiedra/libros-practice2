@@ -11,13 +11,13 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommentResponseDto {
 
-    private long id;
+    private Long id;
 
     private String body;
     private int points;
 
-    private long userId;
+    private Long userId;
 
-    private long bookId;
+    private Long bookId;
 
 }

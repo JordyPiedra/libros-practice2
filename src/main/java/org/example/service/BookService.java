@@ -1,11 +1,14 @@
 package org.example.service;
 
 
+import jakarta.annotation.PostConstruct;
 import org.example.dto.BookDto;
+import org.example.dto.BookIdentifiersDto;
 import org.example.dto.CommentDto;
 import org.example.dto.UserDto;
 import org.example.model.Book;
 import org.example.model.Comment;
+import org.example.model.User;
 import org.example.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -38,6 +42,10 @@ public class BookService {
     public BookDto create(BookDto bookDto) {
         Book book = this.repository.save(this.toDomain(bookDto));
         return this.toDTO(book);
+    }
+
+    public Page<BookIdentifiersDto> getAllBooksIdentifier(Pageable page) {
+        return this.repository.findAll(page).map(this::toBookIdentifiersDto);
     }
 
     public BookDto update(Long id, BookDto bookDto) {
@@ -69,6 +77,11 @@ public class BookService {
                 .publicationYear(book.getPublicationYear())
                 .editorial(book.getEditorial())
                 .comments(book.getComments() == null ? new ArrayList<>() : book.getComments().stream().map(this::toCommentDTO).toList()).build();
+    }
+
+    private BookIdentifiersDto toBookIdentifiersDto(Book book) {
+        return BookIdentifiersDto.builder().id(book.getId())
+                .title(book.getTitle()).build();
     }
 
     private CommentDto toCommentDTO(Comment comment) {

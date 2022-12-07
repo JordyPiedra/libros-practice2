@@ -79,7 +79,6 @@ public class UserService {
         return CommentResponseDto.builder().id(comment.getId())
                 .body(comment.getBody())
                 .points(comment.getPoints())
-                .userId(comment.getUser().getId())
                 .bookId(comment.getBook().getId())
                 .build();
     }

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.example.dto.BookDto;
+import org.example.dto.CommentResponseDto;
 import org.example.dto.UserDto;
 import org.example.service.UserService;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
@@ -175,10 +177,8 @@ public class UserController {
     }
 
 
-
     @GetMapping("/{id}/comments/")
-    public Page<UserDto> getAllCommentsByUser(@PathVariable long id, Pageable page)
-    {
-        return this.service.getAll(page);
+    public List<CommentResponseDto> getAllCommentsByUser(@PathVariable long id) {
+        return this.service.getCommentsByUser(id);
     }
 }

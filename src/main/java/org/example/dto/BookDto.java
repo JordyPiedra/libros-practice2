@@ -3,7 +3,6 @@ package org.example.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.model.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +12,18 @@ import java.util.List;
 @Builder
 public class BookDto {
 
-	private long id;
+    private long id;
 
-	private String title;
+    private String title;
 
-	private String summary;
+    private String summary;
 
-	private String author;
+    private String author;
 
-	private String editorial;
+    private String editorial;
 
-	private int publicationYear;
+    private int publicationYear;
 
-	private List<Comment> comments = new ArrayList<>();
+    private List<CommentDto> comments = new ArrayList<>();
 
 }

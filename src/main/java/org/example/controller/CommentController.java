@@ -21,7 +21,7 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 
 
 @RestController
-@RequestMapping
+@RequestMapping("/books/{idBook}")
 public class CommentController {
 
 
@@ -53,7 +53,7 @@ public class CommentController {
                     content = @Content
             )
     })
-    @GetMapping("/books/{idBook}/comments")
+    @GetMapping("/comments")
     public List<CommentDto> getAll(
             @Parameter(description = "Comments by Book Id")
             @PathVariable long idBook) {
@@ -81,7 +81,7 @@ public class CommentController {
                     content = @Content
             )
     })
-    @GetMapping("/books/{idBook}/comments/{id}")
+    @GetMapping("/comments/{id}")
     public CommentDto getComment(
             @Parameter(description = "id of book to be searched")
             @PathVariable long idBook,
@@ -111,13 +111,13 @@ public class CommentController {
                     content = @Content
             )
     })
-    @PostMapping("/books/{idBook}/comments/")
+    @PostMapping("/comments/")
     public ResponseEntity<CommentDto> createComment(
             @Parameter(description = "Book Id")
             @PathVariable long idBook,
             @Parameter(description = "Insert data")
             @RequestBody CommentDto commentDto) {
-        CommentDto responseDto = this.service.save(idBook, commentDto);
+        CommentDto responseDto = this.service.create(idBook, commentDto);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(responseDto.getId()).toUri();
         return ResponseEntity.created(location).body(responseDto);
     }
@@ -144,15 +144,14 @@ public class CommentController {
                     content = @Content
             )
     })
-    @PutMapping("/books/{idBook}/comments/{id}")
+    @PutMapping("/comments/{id}")
     public ResponseEntity<CommentDto> updateComment(
             @Parameter(description = "Book Id")
             @PathVariable long idBook,
             @Parameter(description = "Comment Id")
             @PathVariable long id,
             @RequestBody CommentDto commentDto) {
-        commentDto.setId(id);
-        CommentDto responseDto = this.service.save(idBook, commentDto);
+        CommentDto responseDto = this.service.update(idBook, id, commentDto);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -177,11 +176,13 @@ public class CommentController {
                     content = @Content
             )
     })
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/comments/{id}")
     public ResponseEntity<BookDto> deleteComment(
+            @Parameter(description = "Book Id")
+            @PathVariable long idBook,
             @Parameter(description = "Comment Id")
             @PathVariable long id) {
-        this.service.delete(id);
+        this.service.delete(idBook, id);
         return ResponseEntity.ok().build();
     }
 }

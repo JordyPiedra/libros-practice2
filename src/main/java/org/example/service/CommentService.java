@@ -44,7 +44,7 @@ public class CommentService {
         return this.toDTO(comment);
     }
 
-    public CommentDto save(long idBook, CommentDto commentDto) {
+    public CommentDto create(long idBook, CommentDto commentDto) {
         Comment comment = this.toDomain(commentDto);
         this.setBook(comment, idBook);
         this.setUser(comment, commentDto.getUser().getNick());
@@ -52,8 +52,21 @@ public class CommentService {
         return this.toDTO(comment);
     }
 
+    public CommentDto update(long idBook, long id ,CommentDto commentDto) {
+        this.validateComment(id);
+        Comment comment = this.toDomain(commentDto);
+        comment.setId(id);
+        this.setBook(comment, idBook);
+        this.setUser(comment, commentDto.getUser().getNick());
+        this.repository.save(comment);
+        return this.toDTO(comment);
+    }
 
-    public void delete(Long id) {
+
+    public void delete(Long idBook, Long id) {
+        this.bookRepository.findById(idBook)
+                .orElseThrow(() -> new NoSuchElementException("Book not found for this id :: " + idBook));
+        this.validateComment(id);
         this.repository.deleteById(id);
     }
 
@@ -87,4 +100,8 @@ public class CommentService {
                 .build();
     }
 
+    private Comment validateComment(long id) {
+        return this.repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Comment not found for this id :: " + id));
+    }
 }

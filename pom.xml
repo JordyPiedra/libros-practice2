@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>es.codeurjc</groupId>
-    <artifactId>bd_ejem5</artifactId>
+    <artifactId>practica2</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <parent>

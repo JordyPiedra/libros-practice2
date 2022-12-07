@@ -50,7 +50,6 @@ public class BookController {
                     content = @Content
             )
     })
-
     @GetMapping("/")
     public List<BookDto> getAll() {
         return this.service.getAll();
